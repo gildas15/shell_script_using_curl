@@ -1,3 +1,4 @@
+
 #!/bin/bash
 # ----------------------------------------------------------------------
 # Author : MBA SOB GILDAS (BI EGN)
@@ -7,7 +8,7 @@
 source /opt/application/smile-gw/efiles/params.sh
 
 # declare variable specific to file
-stream_id=3385
+stream_id=3601
 archive_file="SIU_$(date +"%Y%m%d").zip"
 authorization="Basic cTFmVUx1RWZtUVZmamF6RUJVbHBIdVZkbHBjTFIxMlY6STJCNnhDTWJJakxNWmUxWFZYSFFtS1ZiUG9ocjgzSTZndzZkVW5kRThGZW8="
 
@@ -54,7 +55,8 @@ fi
 
 # Get corefr files from eFiles and archive them in a .tar.gz file
 
-curl -k -X GET -L -H "Authorization: Bearer $jwt_token" "$url_file_download/$operationId/content" | unzip -v - | zip SIU_$(date +"%Y%m%d").zip -T - 
+curl -k -X GET -L -H "Authorization: Bearer $jwt_token" "$url_file_download/$operationId/content" -o SIU.csv && zip SIU_$(date +"%Y%m%d").zip SIU.csv
+
 
 # check if the files download and archiving was successfull 
 
@@ -64,7 +66,7 @@ echo "$(date +"%Y-%m-%d:%H:%M:%S") all the files has been downloaded and been ar
 else
 echo "$(date +"%Y-%m-%d:%H:%M:%S") error during the download and archiving of siu files"
 fi
-# copy the archive of corefr on the gateway server where the ETL will use it to run the siu project. do not copy if the archive is empty
+# copy the archive of siu on the gateway server where the ETL will use it to run the siu project. do not copy if the archive is empty
 
 if unzip -l "$archive_file" | grep -qE '^[ ]*[0-9]+'
 then
