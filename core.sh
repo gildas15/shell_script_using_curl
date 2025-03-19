@@ -70,6 +70,9 @@ if tar -tzf "$archive_file" | grep -q '.'
 then
     cp "$archive_file" /var/opt/data/flat/smile-gw/corefr/
     echo "$(date +"%Y-%m-%d:%H:%M:%S") Archive $archive_file has been copied to /var/opt/data/flat/smile-gw/corefr/"
+#copy archive file on dev Gateway
+    scp /var/opt/data/flat/smile-gw/corefr/$archive_file smile-gw@10.235.75.107:/var/opt/data/flat/smile-gw/corefr/
+    echo "$(date +"%Y-%m-%d:%H:%M:%S") Archive $archive_file has been copied to DEV Gateway"
 else
     echo "$(date +"%Y-%m-%d:%H:%M:%S") Cannot copy the archive file $archive_file to /var/opt/data/flat/smile-gw/corefr/ because it is empty"
 fi

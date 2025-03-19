@@ -92,7 +92,7 @@ echo "$(date +"%Y-%m-%d:%H:%M:%S") end downloading archive of lot5"
 
 #else stream_id is for FVP & FVC = lot4
 else
-archive_file="CMS-$(date -d "tomorrow" +"%Y%m%d").tar.gz"
+archive_file="CMS-$(date +"%Y%m%d").tar.gz"
 echo "$(date +"%Y-%m-%d:%H:%M:%S") begin downloading archive of lot4"
 curl -k -X GET -L -H "Authorization: Bearer $jwt_token" "$url_file_download/$operationId/content" | tar -xvzf - | tar -cvzf CMS-$(date -d "tomorrow" +"%Y%m%d").tar.gz -T -
 echo "$(date +"%Y-%m-%d:%H:%M:%S") end downloading archive of lot4"
@@ -110,6 +110,9 @@ if tar -tzf "$archive_file" | grep -q '.'
 then
     cp "$archive_file" /var/opt/data/flat/smile-gw/s4cms/
     echo "$(date +"%Y-%m-%d:%H:%M:%S") Archive $archive_file has been copied to /var/opt/data/flat/smile-gw/s4cms/"
+#copy archive file on dev Gateway
+    scp /var/opt/data/flat/smile-gw/s4cms/$archive_file smile-gw@10.235.75.107:/var/opt/data/flat/smile-gw/s4cms/
+    echo "$(date +"%Y-%m-%d:%H:%M:%S") Archive $archive_file has been copied to DEV Gateway"
 else
     echo "$(date +"%Y-%m-%d:%H:%M:%S") Cannot copy the archive file $archive_file to /var/opt/data/flat/smile-gw/s4cms/ because it is empty"
 fi
